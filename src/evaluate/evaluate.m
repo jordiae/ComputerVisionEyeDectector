@@ -1,0 +1,34 @@
+load('../../data/splittedDatasets.mat');
+load('../../models/models.mat');
+customFeatIndices = 1:nCustomFeatures;
+HOGFeatIndices = (nCustomFeatures+1):(nCustomFeatures+nHOGfeatures);
+allFeatIndices = 1:(nCustomFeatures+nHOGfeatures);
+labelIndex = nCustomFeatures+nHOGfeatures+1;
+
+% Detector ulls només HOG
+yhat1 = predict(SVMModelEyesHOG,datasetEyesTest(:,HOGFeatIndices));
+[confMat1, accuracy1, FScoreMinority1] = metrics(datasetEyesTest(:,labelIndex),yhat1)
+
+% Detector ulls només característiques pròpies
+yhat2 = predict(SVMModelEyesCustom,datasetEyesTest(:,customFeatIndices));
+[confMat2, accuracy2, FScoreMinority2] = metrics(datasetEyesTest(:,labelIndex),yhat2)
+
+% Detector ulls característiques pròpies i HOG
+yhat3 = predict(SVMModelEyesHOGCustom,datasetEyesTest(:,allFeatIndices));
+[confMat3, accuracy3, FScoreMinority3] = metrics(datasetEyesTest(:,labelIndex),yhat3)
+
+% Detector mirada només HOG
+yhat4 = predict(SVMModelLookingHOG,datasetLookingTest(:,HOGFeatIndices));
+[confMat4, accuracy4, FScoreMinority4] = metrics(datasetLookingTest(:,labelIndex),yhat4)
+
+% Detector mirada només caractzerístiques pròpies
+yhat5 = predict(SVMModelLookingCustom,datasetLookingTest(:,customFeatIndices));
+[confMat5, accuracy5, FScoreMinority5] = metrics(datasetLookingTest(:,labelIndex),yhat5)
+
+% Detector mirada caractzerístiques pròpies i HOG
+yhat6 = predict(SVMModelLookingHOGCustom,datasetLookingTest(:,allFeatIndices));
+[confMat6, accuracy6, FScoreMinority6] = metrics(datasetLookingTest(:,labelIndex),yhat6)
+
+%bestModelEyes = SVMModelEyesHOG%Custom;
+%bestModelLooking = SVMModelLookingHOG%Custom;
+%save('../../models/bestModel.mat','bestModelEyes','bestModelLooking');
