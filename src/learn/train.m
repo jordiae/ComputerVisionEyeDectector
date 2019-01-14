@@ -8,28 +8,27 @@ labelIndex = nCustomFeatures+nHOGfeatures+1;
 
 disp('SVM 1');
 % Detector ulls només HOG
-SVMModelEyesHOG = fitcsvm(datasetEyesLearn(:,HOGFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','auto');
+SVMModelEyesHOG = fitcsvm(datasetEyesLearn(:,HOGFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','BoxConstraint','HyperparameterOptimizationOptions',struct('UseParallel',true,'Verbose',1));
 
 disp('SVM 2');
 % Detector ulls només característiques pròpies
-SVMModelEyesCustom = fitcsvm(datasetEyesLearn(:,customFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','auto');
-
+SVMModelEyesCustom = fitcsvm(datasetEyesLearn(:,customFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','BoxConstraint','HyperparameterOptimizationOptions',struct('UseParallel',true,'Verbose',1));
 disp('SVM 3');
 % Detector ulls característiques pròpies i HOG
-SVMModelEyesHOGCustom = fitcsvm(datasetEyesLearn(:,allFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','auto');
+SVMModelEyesHOGCustom = fitcsvm(datasetEyesLearn(:,allFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','BoxConstraint','HyperparameterOptimizationOptions',struct('UseParallel',true,'Verbose',1));
 
 
 disp('SVM 4');
 % Detector mirada només HOG
-SVMModelLookingHOG = fitcsvm(datasetLookingLearn(:,HOGFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','auto');
+SVMModelLookingHOG = fitcsvm(datasetLookingLearn(:,HOGFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','BoxConstraint','HyperparameterOptimizationOptions',struct('UseParallel',true,'Verbose',1));
 
 disp('SVM 5');
-% Detector mirada només caractzerístiques pròpies
-SVMModelLookingCustom = fitcsvm(datasetLookingLearn(:,customFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','auto');
+% Detector mirada només característiques pròpies
+SVMModelLookingCustom = fitcsvm(datasetLookingLearn(:,customFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','BoxConstraint','HyperparameterOptimizationOptions',struct('UseParallel',true,'Verbose',1));
 
 disp('SVM 6');
 % Detector mirada caractzerístiques pròpies i HOG
-SVMModelLookingHOGCustom = fitcsvm(datasetLookingLearn(:,allFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','auto');
+SVMModelLookingHOGCustom = fitcsvm(datasetLookingLearn(:,allFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'OptimizeHyperparameters','BoxConstraint','HyperparameterOptimizationOptions',struct('UseParallel',true,'Verbose',1));
 
 
 save('../../models/models.mat','SVMModelEyesHOG','SVMModelEyesCustom','SVMModelEyesHOGCustom','SVMModelLookingHOG','SVMModelLookingCustom','SVMModelLookingHOGCustom');

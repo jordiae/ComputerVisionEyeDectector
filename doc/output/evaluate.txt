@@ -1,0 +1,96 @@
+>> evaluate
+
+confMat1 =
+
+        8688           0
+           0         438
+
+
+accuracy1 =
+
+     1
+
+
+FScoreMinority1 =
+
+     1
+
+
+confMat2 =
+
+        8688           0
+           0         438
+
+
+accuracy2 =
+
+     1
+
+
+FScoreMinority2 =
+
+     1
+
+
+confMat3 =
+
+        8688           0
+           0         438
+
+
+accuracy3 =
+
+     1
+
+
+FScoreMinority3 =
+
+     1
+
+
+confMat4 =
+
+   145    33
+    45   234
+
+
+accuracy4 =
+
+    0.8293
+
+
+FScoreMinority4 =
+
+    0.8571
+
+
+confMat5 =
+
+   101    77
+    48   231
+
+
+accuracy5 =
+
+    0.7265
+
+
+FScoreMinority5 =
+
+    0.7871
+
+
+confMat6 =
+
+   143    35
+    42   237
+
+
+accuracy6 =
+
+    0.8315
+
+
+FScoreMinority6 =
+
+    0.8603

@@ -1,5 +1,7 @@
 %load('../../models/bestModel.mat');
 load('../../data/dataset.mat');
+load('../../models/models.mat');
+load('../../data/splittedDatasets.mat');
 %I = imread('../data/BioID_0000.pgm');
 I = rgb2gray(imread('../../tests/trump.jpeg'));
 %I = rgb2gray(imread('../../tests/messi.jpg'));
@@ -20,7 +22,8 @@ labelIndex = nCustomFeatures+nHOGfeatures+1;
 
 %yhat = predict(SVMModelEyesHOG,extractHOGFeatures(I(1:128,1:32)));
 
-
+SVMModelEyeHOGFinal = fitcsvm(datasetEyesLearn(:,HOGFeatIndices),datasetEyesLearn(:,labelIndex),'ClassNames',[1,0]);
+SVMModelLookingHOGFinal = fitcsvm(datasetLookingLearn(:,HOGFeatIndices),datasetLookingLearn(:,labelIndex),'ClassNames',[1,0],'BoxConstraint', 0.4535 ); % 0.37611 
 
 image_resized_x = 128;
 image_resized_y = 32;
@@ -38,15 +41,20 @@ earlyStop = false;
 for i = 1:step_y:(R-window_y)
     for j = 1:step_x:(C-window_x)
         hogs = extractHOGFeatures(imresize(imfilter(I(i:i+window_y,j:j+window_x),fspecial('gaussian')),[image_resized_y,image_resized_x]));
-        yhat(i,j) = predict(bestModelEyes,hogs);
+        %lbps = extractLBPFeatures(imresize(imfilter(I(i:i+window_y,j:j+window_x),fspecial('gaussian')),[image_resized_y,image_resized_x]));
+        % yhat(i,j) = predict(SVMModelEyeHOGFinal,hogs);
+        %yhat(i,j) = predict(SVMModelEyesCustom,lbps);
         if ~earlyStop
-            [label,score,cost] = predict(bestModelEyes,hogs);
+            %[label,score,cost] = predict(SVMModelEyesHOG,hogs);
+            [label,score,cost] = predict(SVMModelEyeHOGFinal, hogs);
+            %[label,score,cost] = predict(SVMModelEyesCustom,lbps);
             yhatMax(i,j) = label*score(1);
             if label == 1
                 eye = true;
             end
         end
         if earlyStop && sum(sum(yhat)) > 0
+            yhat(i,j) = predict(SVMModelEyeHOGFinal,hogs);
             break
         end
     end
@@ -59,11 +67,13 @@ end
 
 if earlyStop
     imshow(eyeSubImage);
-    hogs = extractHOGFeatures(eyeSubImage);
+    hogs =  extractHOGFeatures(imresize(imfilter(eyeSubImage,fspecial('gaussian')),[image_resized_y,image_resized_x]));
+    lbps = extractLBPFeatures(imresize(imfilter(eyeSubImage,fspecial('gaussian')),[image_resized_y,image_resized_x]));
     
     if eye == 1
         disp('EYES: yes');
-        yhatLooking = predict(bestModelLooking,hogs);
+        %yhatLooking = predict(bestModelLooking,hogs);
+        yhatLooking = predict(SVMModelLookingCustomHOGFinal,[lbps hpgs]);
         if yhatLooking == 1
             disp('LOOKING: yes');
         else
@@ -82,7 +92,10 @@ else
         hold on;
         rectangle('Position',[psX,psY,window_x,window_y],'EdgeColor', 'r','LineWidth', 3);
         disp('EYES: yes');
-        yhatLooking = predict(bestModelLooking,hogs);
+        hogs = extractHOGFeatures(imresize(imfilter(I(psY:psY+window_y,psX:psX+window_x),fspecial('gaussian')),[image_resized_y,image_resized_x]));
+        lbps =  extractLBPFeatures(imresize(imfilter(I(psY:psY+window_y,psX:psX+window_x),fspecial('gaussian')),[image_resized_y,image_resized_x]));
+        %yhatLooking = predict(bestModelLooking,hogs);
+        yhatLooking = predict(SVMModelLookingHOGFinal,hogs);
         if yhatLooking == 1
             disp('LOOKING: yes');
         else
